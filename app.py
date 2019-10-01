@@ -3,6 +3,10 @@ import requests
 import platform
 from bs4 import BeautifulSoup
 import json
+from PIL import Image
+from io import BytesIO
+
+
 
 app = Flask(__name__)
 
@@ -44,6 +48,15 @@ def mediainfo(id):
     image_filename = url.split('/')[-1]
     print(url)
     print(image_filename)
+
+    data = requests.get(url).content
+    '''
+    Load image  
+    '''
+    im = Image.open(BytesIO(data))
+    width, height = im.size
+    print(width,height)
+
 
     # Retrieve image title option 2 from DOM
     #image_title = soup.select_one('#itemDetail-mediaTitle span').text
