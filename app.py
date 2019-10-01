@@ -41,7 +41,9 @@ def mediainfo(id):
 
     #Retrieve image url
     url = soup.select_one('div[item_id="' + id + '"] img')['src']
+    image_filename = url.split('/')[-1]
     print(url)
+    print(image_filename)
 
     # Retrieve image title option 2 from DOM
     #image_title = soup.select_one('#itemDetail-mediaTitle span').text
