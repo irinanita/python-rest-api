@@ -1,8 +1,8 @@
 from flask import Flask
-import platform
-import json
 import requests
+import platform
 from bs4 import BeautifulSoup
+import json
 
 app = Flask(__name__)
 
@@ -26,18 +26,26 @@ def system():
 
 @app.route('/mediainfo/<string:id>')
 def mediainfo(id):
-    print(id)
     response = requests.get('https://www.pond5.com/photo/' + id + '/') #retrieve the web page with our data
     '''
     We create a new BeautifulSoup object by passing 
     the constructor our newly acquired HTML content 
     and the type of parser we want to use:
     '''
-    soup = BeautifulSoup(response.content, 'html.parser')
-    our_image = soup.select_one('div[item_id="' + id + '"]').text
-    #print(response.status_code)
-    #print(dir(response))
-    print(our_image)
+    soup = BeautifulSoup(response.content, 'html.parser') # parse the retrieved response
+    #Retrieve image title
+    our_image = soup.select_one('div[item_id="' + id + '"]')['formats_data']
+    image_data = json.loads(our_image)
+    print(image_data)
+    print(image_data['title'])
+
+    #Retrieve image url
+    url = soup.select_one('div[item_id="' + id + '"] img')['src']
+    print(url)
+
+    # Retrieve image title option 2 from DOM
+    #image_title = soup.select_one('#itemDetail-mediaTitle span').text
+    #print(image_title)
 
     return "JSON object with image filename, size, dimensions and image title"
 
